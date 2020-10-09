@@ -2,17 +2,15 @@
 //セッションスタート
 session_start();
 
-require "conn.php";
-$sql = "INSERT INTO projects_information_1 VALUES ('', 'projects_name', 'address', 'overview', '' );";
-$result  = mysqli_query($conn, $sql);
+//仮の行を作成する
+//require "conn.php";
+//$sql = "INSERT INTO projects_information_1 VALUES ('', 'projects_name', 'address', 'overview', '' );";
+//$result  = mysqli_query($conn, $sql);
 
-
-//if(!isset($_SESSION['count'])){
     $link = mysqli_connect('localhost', 'root', '');
     if (!$link) {
     die('Failed connecting'.mysqli_error());
     }
-    //print('<p>Successed connecting</p>');
 
     //DBの選択
     $db_selected = mysqli_select_db($link , 'test_db');
@@ -34,11 +32,6 @@ $result  = mysqli_query($conn, $sql);
     print_r($_SESSION['count']);
     // MySQLに対する処理
     $close_flag = mysqli_close($link);
-
-    //}else{
-    //    print_r($_SESSION['count']);
-    //}
-
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +43,25 @@ $result  = mysqli_query($conn, $sql);
         <link rel="stylesheet" href = "style.css">
     </head>
     <body>
+    <main>
+        <div class="main-container">
+            <div class="sidebar">
+                <h1>menu</h1>
+                <ul class="subnav">
+                    <!--<li><a href="#" class="current">管理者ページ</a></li>-->
+                    <li>現場情報管理</li>
+                    <li><a href="p_entry.php" style="background-color:gray">-現場登録</a></li>
+                    <li><a href="p_edit.php">-現場編集</a></li>
+                    <li>施工会社管理</li>
+                    <li><a href="c_entry.php">-施工会社登録</a></li>
+                    <li><a href="c_edit.php">-施工会社/ユーザ編集</a></li>
+                    <li>施工状況確認</li>
+                    <li><a href="report.php">-報告書確認</a></li>
+                </ul>
+            </div>
+            <div class="maincol">
+                <div class="maincol-container">
+    
 
     <!--<h1>現場管理アプリ</h1>-->
     <h2>現場情報を入力してください。</h2>
@@ -64,7 +76,7 @@ $result  = mysqli_query($conn, $sql);
         <h2>図面情報を登録してください。</h2>
             
         <form id="my_form">
-			<label for="image_file">ファイルを選択してください</label><br>
+			<label for="image_file">ファイル選択はこちらをクリック</label><br>
             <input type="file" name="image_file[]" id="image_file" multiple="multiple" onchange=checkFile()><br>
 
             <table id = "pdf_information">
@@ -78,9 +90,20 @@ $result  = mysqli_query($conn, $sql);
             <!--<input type="submit" name ="next" value = "次へ">-->
         </form>
         <button type="button" name="next" value = "次へ" onclick="setPDF()">次へ</button>
+        </div>
+            </div>
+        </div>
+</main>
         <script>
 
+functon ent(){
+    to_entry_user.then(()=>{
+        page();
+    });
+}
+
         function checkFile(){
+            
             //選択ファイルのアップロード
             // フォームデータを取得
             var formdata = new FormData(document.getElementById("my_form"));
@@ -160,6 +183,13 @@ $result  = mysqli_query($conn, $sql);
         }
 
         function setPDF(){
+            //アップロードするファイル情報の取得
+
+            //console.log(document.getElementById("image_file").value[0]);
+            //console.log(document.getElementById("image_file").files[0]);
+            
+            //console.log(document.getElementById("image_file").files[1].name);
+            
             //テーブル取得
             var table = document.getElementById("pdf_information");
             var pdf_name;
@@ -198,6 +228,11 @@ $result  = mysqli_query($conn, $sql);
             xhttpreq.open("POST", "upload_project_info.php", true);
             xhttpreq.send(fd);
             window.location.href = 'p_entry_report_place.php';
+            
+            }
+            
+            function page(){
+                window.location.href = 'p_entry_user.php';
             }
 
             

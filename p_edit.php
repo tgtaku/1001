@@ -114,14 +114,16 @@ if(isset($_POST['search_pro'])){
                 $i++;
             }
         }
+        
     }
+//json形式に変更
+$json_array_project = json_encode($row_array_project);
+$json_array_address = json_encode($row_array_address);
+$json_array_overview = json_encode($row_array_overview);
 
-    //json形式に変更
-    $json_array_project = json_encode($row_array_project);
-    $json_array_address = json_encode($row_array_address);
-    $json_array_overview = json_encode($row_array_overview);
-
+    
 }
+//print_r($json_array_project);
 ?>
 <!DOCTYPE html>
 
@@ -177,7 +179,7 @@ if(isset($_POST['search_pro'])){
         </div>
 </main>
 <script type="text/javascript">
-if(<?php echo $json_array_project; ?>[0] !=""){
+if(<?php echo $json_array_project; ?> != ""){
         //テーブル表示
         //phpから配列の取得
         var pro = <?php echo $json_array_project; ?>;
@@ -205,8 +207,8 @@ if(<?php echo $json_array_project; ?>[0] !=""){
                 cell2[j].value = "address";
                 cell3[j].innerHTML = ove[j];
                 cell3[j].value = "overview";
-                //cell4[j].innerHTML = '<input type = "button" value = "編集" onclick="change_project_info(this)"/>';
-                cell4[j].innerHTML = '<input type = "submit" id = "p_project" name="p_project" value = "編集">';
+                cell4[j].innerHTML = '<input type = "button" value = "編集" onclick="change_project_info(this)"/>';
+                //cell4[j].innerHTML = '<input type = "submit" id = "p_project" name="p_project" value = "編集">';
         }
         }
     </script>
@@ -218,10 +220,11 @@ if(<?php echo $json_array_project; ?>[0] !=""){
         
         var p_address = tr.cells[1].innerHTML;
         var p_overview = tr.cells[2].innerHTML;
+        var param = "name="+p_name+"&address="+p_address+"&overview="+p_overview;
         //console.log(tr.cells[0].innerHTML);
         //現場情報編集画面にポスト
         // フォームデータを取得
-        fd = new FormData();
+        /*fd = new FormData();
         fd.append('project',p_name);
         fd.append('address',p_address);
         fd.append('overview',p_overview);
@@ -233,9 +236,10 @@ if(<?php echo $json_array_project; ?>[0] !=""){
             }
             };
             xhttpreq.open("POST", "p_edit_company.php", true);
-            xhttpreq.send(fd);
-            ///document.location.href = "https://www.ipentec.com/"+paramstr;   
-            window.location.href ="http://10.20.170.52/web/p_edit_company.php/"+p_address;
+            xhttpreq.send(fd);*/
+            ///document.location.href = "https://www.ipentec.com?"+paramstr;   
+            //window.
+            location.href ="http://10.20.170.52/web/p_edit_company.php?"+param;
             //header('Location: http://10.20.170.52/web/p_edit_company.php');
         }
     </script>

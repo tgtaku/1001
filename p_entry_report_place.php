@@ -40,17 +40,19 @@ $result_file  = mysqli_query($link ,"SELECT * FROM pdf_information_1 where proje
 if (!$result_file) {
     die('Failed query'.mysql_error());
 }
+//print_r($result_file);
 //データ格納用配列の取得
 $row_array_file = array();
 $row_array_glob = array();
 $j = 0;
 $selectedPD = "";
 while ($row = mysqli_fetch_assoc ($result_file)) {
+    //print_r($row);
     $row_array_file[$j] = $row['pdf_name'];
     $j++;
 }
-print_r($row_array_file);
-print_r(count($row_array_file));
+//print_r($row_array_file);
+//print_r(count($row_array_file));
 for($i = 0; $i < count($row_array_file); $i++ ){
     //ディレクトリ作成
     $moji = substr($row_array_file[$i], 0, strlen($row_array_file[$i]) - 4);
@@ -80,7 +82,7 @@ for($i = 0; $i < count($row_array_file); $i++ ){
     //print_r($out);
     $cmd = 'D:\ImageMagick-7.0.10-Q16\convert.exe'.' '.$path.' '.$out;
     //echo $cmd;
-    exec($cmd);
+    //exec($cmd);
     
     $dir_num = $dir."/*";
     //print_r($dir_num);
@@ -111,8 +113,27 @@ $json_array_glob = json_encode($row_array_glob);
     <head>
         <meta charset="UTF-8">
         <title>報告箇所登録画面</title>
+        <link rel="stylesheet" href = "style.css">
     </head>
     <body>
+    <main>
+        <div class="main-container">
+            <div class="sidebar">
+                <h1>menu</h1>
+                <ul class="subnav">
+                    <!--<li><a href="#" class="current">管理者ページ</a></li>-->
+                    <li>現場情報管理</li>
+                    <li><a href="p_entry.php" style="background-color:gray">-現場登録</a></li>
+                    <li><a href="p_edit.php">-現場編集</a></li>
+                    <li>施工会社管理</li>
+                    <li><a href="c_entry.php">-施工会社登録</a></li>
+                    <li><a href="c_edit.php">-施工会社/ユーザ編集</a></li>
+                    <li>施工状況確認</li>
+                    <li><a href="report.php">-報告書確認</a></li>
+                </ul>
+            </div>
+            <div class="maincol">
+                <div class="maincol-container">
     <h2>報告箇所を登録してください。</h2>
     <ul id="pdfName">
     </ul>
@@ -524,10 +545,16 @@ $json_array_glob = json_encode($row_array_glob);
                     <th style="WIDTH: 60px" id="y">Y</th>
                 </tr>
             </table>
-            <input type = "button" id = "place_button" name="gotPlace" value = "登録" onclick = "to_entry_user()">
+            <input type = "button" id = "place_button" name="gotPlace" value = "登録" onclick = "ent()">
             
 </form>
+</div>
+            </div>
+        </div>
+</main>
 <script>
+
+
             function to_entry_user(){
             console.log("to_entry_user");
             //dirの削除
@@ -616,7 +643,8 @@ $json_array_glob = json_encode($row_array_glob);
                 }
             }
             console.log("test");
-            window.location.href = 'p_entry_user.php';
+            
+            
             }
             </script>
     </body>

@@ -1,20 +1,22 @@
 <?php
-//session_start();
-//$user_name = $_SESSION['user_id'];
-$user_name = "setupuser";
+session_start();
+$user_name = $_SESSION['user_id'];
+$project_id = $_SESSION['count'];
+$json_project_id = json_encode($project_id);
+//$user_name = "kanri1";
 //print_r($user_name);
 $json_user = json_encode($user_name);
 
 //管理者の取得
 //mysqlとの接続
-$link = mysqli_connect('localhost', 'root', 'passward');
+$link = mysqli_connect('localhost', 'root', '');
 if (!$link) {
     die('Failed connecting'.mysqli_error($link));
 }
 //print('<p>Successed connecting</p>');
 
 //DBの選択
-$db_selected = mysqli_select_db($link , 'sys');
+$db_selected = mysqli_select_db($link , 'test_db');
 if (!$db_selected){
     die('Failed Selecting table'.mysqli_error($db_selected));
 }
@@ -36,7 +38,8 @@ while ($row = mysqli_fetch_assoc ($result_file)) {
     
 }
 $json_user_array = json_encode($row_array_user);
-print_r($json_user_array);
+//print_r($row_array_user);
+//print_r($json_user_array);
 // MySQLに対する処理
 $close_flag = mysqli_close($link);
 
@@ -58,7 +61,7 @@ $close_flag = mysqli_close($link);
                 <ul class="subnav">
                     <!--<li><a href="#" class="current">管理者ページ</a></li>-->
                     <li>現場情報管理</li>
-                    <li><a href="p_entry.php" style="background-color:aqua">-現場登録</a></li>
+                    <li><a href="p_entry.php" style="background-color:gray">-現場登録</a></li>
                     <li><a href="p_edit.php">-現場編集</a></li>
                     <li>施工会社管理</li>
                     <li><a href="c_entry.php">-施工会社登録</a></li>
@@ -123,6 +126,8 @@ $close_flag = mysqli_close($link);
 </main>
 
 <script>
+    var p_id = <?php echo $json_project_id; ?>;
+
        function addkanri(){
         var table = document.getElementById("user_kanri");
             //ar row = table.insertRow(-1);
@@ -169,9 +174,11 @@ $close_flag = mysqli_close($link);
         }console.log(k);
         //httpPOST
         var le = k.length;
+        console.log(le);
             for(var p = 0; p < le; p++){
                 fd = new FormData();
                 fd.append('kanri', k[p]);
+                fd.append('id', p_id);
                 xhttpreq = new XMLHttpRequest();
                 xhttpreq.onreadystatechange = function() {
                 if (xhttpreq.readyState == 4 && xhttpreq.status == 200) {
@@ -181,9 +188,12 @@ $close_flag = mysqli_close($link);
                 xhttpreq.open("POST", "insert_kanri.php", true);
                 xhttpreq.send(fd);
                 }
+                window.location.href = 'mypage.php';
         }
        </script>
 
     </body>
     
 </html>
+
+
