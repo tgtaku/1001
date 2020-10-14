@@ -28,7 +28,7 @@ session_start();
     }
     $row = mysqli_fetch_assoc($result_file);
     $row_num = (int) $row['projects_id'];
-    $_SESSION['count'] = $row_num;
+    $_SESSION['count'] = $row_num + 1;
     print_r($_SESSION['count']);
     // MySQLに対する処理
     $close_flag = mysqli_close($link);
@@ -90,17 +90,19 @@ session_start();
             <!--<input type="submit" name ="next" value = "次へ">-->
         </form>
         <button type="button" name="next" value = "次へ" onclick="setPDF()">次へ</button>
+        <!--<button type="button" name="next" value = "次へ" onclick="ent()">次へ</button>-->
+        
         </div>
             </div>
         </div>
 </main>
         <script>
 
-functon ent(){
-    to_entry_user.then(()=>{
+/*functon ent(){
+    setPDF().then(()=>{
         page();
     });
-}
+}*/
 
         function checkFile(){
             
@@ -226,14 +228,17 @@ functon ent(){
                 }
             };
             xhttpreq.open("POST", "upload_project_info.php", true);
+            xhttpreq.addEventListener('load', (event) => {
+                window.location.href = 'p_entry_report_place.php';
+            });
             xhttpreq.send(fd);
-            window.location.href = 'p_entry_report_place.php';
+            
             
             }
             
-            function page(){
+            /*function page(){
                 window.location.href = 'p_entry_user.php';
-            }
+            }*/
 
             
         </script>
