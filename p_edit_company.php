@@ -34,11 +34,15 @@ if(isset($_GET['name'])){
             $row_array_company[$i] = $row['companies_name'];
             $i++;
         }
+        }else{
+            $row_array_user ="";
+            $row_array_company ="";
         //print_r($row_array_user);
+    
+    }
     //json形式に変更
     $json_array_user = json_encode($row_array_user);
     $json_array_company = json_encode($row_array_company);
-    }
 }
 
 ?>
@@ -49,7 +53,7 @@ if(isset($_GET['name'])){
     <head>
         <meta charset="UTF-8">
         <title>現場情報編集</title>
-        <link rel="stylesheet" href = "style.css" type="text/html">
+        <link rel="stylesheet" href = "style.css" type="text/css">
     </head>
     <body>
     <main>
@@ -104,7 +108,7 @@ if(isset($_GET['name'])){
                     <th style="WIDTH: 200px" id="edit_pdf"></th>
                 </tr>            
         </table>
-        <input type = "button" id = "pdf_button" name="addpdf" value = "図面追加" onclick="addpdf()">
+        <input type = "button" id = "pdf_button" name="addpdf" value = "報告箇所編集" onclick="edit_report_point()">
     </form>
     </p>
     
@@ -150,7 +154,7 @@ if(isset($_GET['name'])){
                 cell3.push(row.insertCell(-1));
                 cell1[j].innerHTML = j+1;
                 cell2[j].innerHTML = file[j];
-                cell3[j].innerHTML = '<input type = "button" value = "編集" onclick="change_pdf_info(this)"/>';
+                cell3[j].innerHTML = '<input type = "button" value = "削除" onclick="delete_pdf_info(this)"/>';
                 //cell4[j].innerHTML = '<input type = "submit" id = "p_project" name="p_project" value = "編集">';
         }
         }
