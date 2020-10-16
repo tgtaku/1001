@@ -29,7 +29,7 @@ session_start();
     $row = mysqli_fetch_assoc($result_file);
     $row_num = (int) $row['projects_id'];
     $_SESSION['count'] = $row_num + 1;
-    print_r($_SESSION['count']);
+    //print_r($_SESSION['count']);
     // MySQLに対する処理
     $close_flag = mysqli_close($link);
 ?>
@@ -65,7 +65,6 @@ session_start();
 
     <!--<h1>現場管理アプリ</h1>-->
     <h2>現場情報を入力してください。</h2>
-
         <form action="p_entry.php" method = "post" enctype="multipart/form-data">
             
             現場名<input type = "text" id = "project_name" name = "project_name" value = ""><br />
@@ -185,21 +184,27 @@ session_start();
         }
 
         function setPDF(){
-            //アップロードするファイル情報の取得
-
-            //console.log(document.getElementById("image_file").value[0]);
-            //console.log(document.getElementById("image_file").files[0]);
-            
-            //console.log(document.getElementById("image_file").files[1].name);
-            
+            //現場情報の取得
+            var project_name = document.getElementById("project_name").value;
+            var address = document.getElementById("address").value;
+            var overview = document.getElementById("overview").value;
+            //現場情報の空文字確認
+            if(project_name =="" || address =="" || overview ==""){
+                var err_msg = "現場情報を入力してください。";
+                alert(err_msg);
+            }else{
             //テーブル取得
             var table = document.getElementById("pdf_information");
-            var pdf_name;
+            var pdf_name = [];
             var fd;
             var xhttpreq;
+            var num = table.rows.length-1;
+            
             for(var i = 1; i<table.rows.length; i++){
-            pdf_name = table.rows[i].cells[1].innerHTML;
-            // フォームデータを取得
+            pdf_name[i-1] = table.rows[i].cells[1].innerHTML;
+            }
+            
+            /*// フォームデータを取得
             fd = new FormData();
             fd.append('pdf',pdf_name);
             // XMLHttpRequestによるアップロード処理
@@ -211,27 +216,36 @@ session_start();
             };
             xhttpreq.open("POST", "insert_pdf_information.php", true);
             xhttpreq.send(fd);
-            }
+            }*/
 
 
             fd = new FormData();
-            var project_name = document.getElementById("project_name").value;
-            var address = document.getElementById("address").value;
-            var overview = document.getElementById("overview").value;
+            //現場情報
             fd.append('project_name',project_name);
             fd.append('address',address);
             fd.append('overview',overview);
+            //図面情報
+            
+            fd.append('file',pdf_name);
+            fd.append('file_num', num);
             xhttpreq = new XMLHttpRequest();
             xhttpreq.onreadystatechange = function() {
                 if (xhttpreq.readyState == 4 && xhttpreq.status == 200) {
                     alert(xhttpreq.responseText);
                 }
             };
-            xhttpreq.open("POST", "upload_project_info.php", true);
+            xhttpreq.open("POST", "insert_project_pdf.php", true);
+            //xhttpreq.open("POST", "upload_project_info.php", true);
             xhttpreq.addEventListener('load', (event) => {
                 window.location.href = 'p_entry_report_place.php';
             });
             xhttpreq.send(fd);
+
+            }
+            //アップロードするファイル情報の取得
+            //console.log(document.getElementById("image_file").value[0]);
+            //console.log(document.getElementById("image_file").files[0]);
+            //console.log(document.getElementById("image_file").files[1].name);
             
             
             }

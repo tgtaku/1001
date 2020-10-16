@@ -82,7 +82,7 @@ for($i = 0; $i < count($row_array_file); $i++ ){
     //print_r($out);
     $cmd = 'D:\ImageMagick-7.0.10-Q16\convert.exe'.' '.$path.' '.$out;
     //echo $cmd;
-    //exec($cmd);
+    exec($cmd);
     
     $dir_num = $dir."/*";
     //print_r($dir_num);

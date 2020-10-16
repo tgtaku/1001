@@ -3,16 +3,17 @@ if(isset($_GET['id'])){
     $p_id = $_GET['id'];
     $json_id = json_encode($p_id);
     //print_r($p_id);
-}
-//既存ユーザーの取得
+    //既存ユーザーの取得
 //参加者情報の取得
 $row_array_user = array();
 require "conn.php";
-$mysql_qry_user = "select * from assign_company_information_1 inner join users_information_1 on assign_company_information_1.companies_id = users_information_1.companies_id inner join projects_information_1 on assign_company_information_1.projects_id = projects_information_1.projects_id inner join companies_information_1 on assign_company_information_1.companies_id = companies_information_1.companies_id where projects_id = '$p_id' ;";
+$mysql_qry_user = "select * from assign_company_information_1 inner join users_information_1 on assign_company_information_1.companies_id = users_information_1.companies_id inner join projects_information_1 on assign_company_information_1.projects_id = projects_information_1.projects_id inner join companies_information_1 on assign_company_information_1.companies_id = companies_information_1.companies_id where assign_company_information_1.projects_id = '$p_id';";
 $result_user = mysqli_query($conn, $mysql_qry_user);
 if(mysqli_num_rows($result_user) > 0){
+    //print_r($result_user);
     $i = 0;
     while($row = mysqli_fetch_assoc($result_user)){
+        //print_r($row);
         $row_array_user[$i] = $row['users_name'];
         $row_array_company[$i] = $row['companies_name'];
         $i++;
@@ -28,10 +29,15 @@ $json_array_user = json_encode($row_array_user);
 $json_array_company = json_encode($row_array_company);
 
 
+}
+
 if(isset($_POST['search_user'])){
+    //print_r($_POST);
     require "conn.php";
     $id = $_POST["id"];
+    $json_id = json_encode($id);
     $user_name = $_POST["user_name"];
+    print_r($id);
 
     //①両方なし
     if($id =="" && $user_name == ""){
@@ -243,10 +249,10 @@ $json_array_sum = json_encode($row_array_sum);
         </table>
 </p>
     <p>
-        <form action="p_edit_user.php?id=158" method = "post">
+        <form id = "sub" name = "sub" action="p_edit_user.php" method = "post">
         会社名<input type = "text" name = "id" value = ""><br />
         ユーザー名<input type ="text" name="user_name" value = ""><br />
-        <input type = "submit" id = "search_user" name="search_user" value = "検索">
+        <input type = "submit" id = "search_user" name="search_user" value = "検索"　occlick = "submit">
         </form>
     </p>     
     
@@ -258,7 +264,7 @@ $json_array_sum = json_encode($row_array_sum);
                     <th> <input type = "checkbox" name = "ch" style="WIDTH: 60px" id="user_check" onclick="selectall(this)"></th>
                 </tr>
             </table>
-            <input type = "button" id = "user_button" name="gotUser" value = "次へ" onclick="gotuser()">
+            <input type = "button" id = "user_button" name="gotUser" value = "登録" onclick="gotuser()">
     </form>
     </div>
             </div>
@@ -309,6 +315,8 @@ $json_array_sum = json_encode($row_array_sum);
         
     </script>
     <script>
+        //プロジェクトIDと会社名、ユーザ名を送信
+        var p_id = <?php echo $json_id; ?>;
 
         function selectall(th){
             for(var t = 1; t < table.rows.length; t++){
@@ -357,8 +365,7 @@ $json_array_sum = json_encode($row_array_sum);
         }
 
         function gotuser(){
-            //プロジェクトIDと会社名、ユーザ名を送信
-            var p_id = <?php echo $json_id; ?>;
+            
             var c_name;
             var u_name;
             var le = table.rows.length;
@@ -387,6 +394,14 @@ $json_array_sum = json_encode($row_array_sum);
                 }
             }
             window.location.href = 'p_edit_company.php';
+        }
+
+        function submit(){
+            var ele = document.createElement('input');
+            //データを設定
+            ele.setAttribute('name', 'id');
+            ele.setAttribute('value', p_id);
+            document.sub.appendChild(ele)
         }
     </script>
     </body>
