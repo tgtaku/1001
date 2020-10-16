@@ -3,15 +3,30 @@ if(isset($_GET['name'])){
     $name = $_GET['name'];
     $address = $_GET['address'];
     $overview = $_GET['overview'];
+    
     //json形式に変更
     /*$json_array_project = json_encode($name);
     $json_array_address = json_encode($address);
     $json_array_overview = json_encode($overview);*/
 
     require "conn.php";
+
+    //現場IDの取得
+    $mysql_qry = "select * from projects_information_1 where projects_name = '$name' AND projects_street_address = '$address' AND overview = '$overview';";
+    $result = mysqli_query($conn, $mysql_qry);
+    if(mysqli_num_rows($result) > 0){
+        $i = 0;
+        while($row = mysqli_fetch_assoc($result)){
+            $project_id = $row['projects_id'];
+            $i++;
+        }
+    print_r($project_id);
+    //json形式に変更
+    $json_project_id = json_encode($project_id);}
+
     //図面情報の取得
     $row_array_file = array();
-    $mysql_qry = "select * from pdf_information_1 inner join projects_information_1 on pdf_information_1.project_id = projects_information_1.projects_id where projects_name = '$name';";
+    $mysql_qry = "select * from pdf_information_1 inner join projects_information_1 on pdf_information_1.project_id = projects_information_1.projects_id where projects_name = '$name' AND projects_street_address = '$address' AND overview = '$overview';";
     $result = mysqli_query($conn, $mysql_qry);
     if(mysqli_num_rows($result) > 0){
         $i = 0;
@@ -122,7 +137,7 @@ if(isset($_GET['name'])){
                     <th style="WIDTH: 200px" id="user">ユーザ名</th>
                 </tr>            
         </table>
-        <input type = "button" id = "edit_user_button" name="edituser" value = "参加者編集" onclick="edituser()">
+        <input type = "button" id = "edit_user_button" name="edituser" value = "参加者編集" onclick="edit_user()">
     </form>
     </p>
     <input type = "button" id = "edit" name="edit" value = "変更" onclick="edit()">
@@ -133,6 +148,9 @@ if(isset($_GET['name'])){
 
     </body>
     <script>
+    //phpからIDの取得
+    var project_id = <?php echo $json_project_id; ?>;
+
     //図面情報をテーブルに挿入
     if(<?php echo $json_array_file; ?>[0] !=""){
         //テーブル表示
@@ -192,12 +210,39 @@ if(isset($_GET['name'])){
 
         }
         //ユーザ情報の編集
-        function edituser(){
-
+        function edit_user(){
+            var param = "id="+project_id;
+            location.href ="http://10.20.170.52/web/p_edit_user.php?"+param;
         }
         //変更処理
         function edit(){
-            window.location.href ="http://10.20.170.52/web/mypage.php?";
+            
+            var table = document.getElementById("project_info");
+            var project_name = table.rows[0].getElementsByTagName("input")[0].value;
+            var address = table.rows[1].getElementsByTagName("input")[0].value;
+            var overview = table.rows[2].getElementsByTagName("input")[0].value;
+            /*console.log(project_id);
+            console.log(project_name);
+            console.log(address);
+            console.log(overview);*/
+            fd = new FormData();
+            //現場情報
+            fd.append('project_id',project_id);
+            fd.append('project_name',project_name);
+            fd.append('address',address);
+            fd.append('overview',overview);
+            xhttpreq = new XMLHttpRequest();
+            xhttpreq.onreadystatechange = function() {
+                /*if (xhttpreq.readyState == 4 && xhttpreq.status == 200) {
+                    alert(xhttpreq.responseText);
+                }*/
+            };
+            xhttpreq.open("POST", "upload_project_info.php", true);
+            xhttpreq.addEventListener('load', (event) => {
+                window.location.href = "http://10.20.170.52/web/mypage.php";
+            });
+            xhttpreq.send(fd);
+            
         }
     </script>
 </html>
