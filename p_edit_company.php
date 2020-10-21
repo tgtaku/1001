@@ -20,8 +20,11 @@ if(isset($_GET['name'])){
             $project_id = $row['projects_id'];
             $i++;
         }
-    print_r($project_id);
+    //print_r($project_id);
     //json形式に変更
+    //セッションスタート
+    session_start();
+    $_SESSION['count'] = $project_id;
     $json_project_id = json_encode($project_id);}
 
     //図面情報の取得
@@ -148,6 +151,7 @@ if(isset($_GET['name'])){
 
     </body>
     <script>
+    console.log("ID : " + <?php echo $_SESSION['count']; ?>);
     //phpからIDの取得
     var project_id = <?php echo $json_project_id; ?>;
 
@@ -201,18 +205,21 @@ if(isset($_GET['name'])){
         }
         }
 
+
+        //報告箇所編集
+        function edit_report_point(){
+            location.href ="http://10.20.170.52/web/p_entry_report_place.php";
+        }
+
         //PDFファイルの追加
         function addpdf(){
 
         }
-        //報告箇所の変更
-        function change_pdf_info(select_pdf){
-
-        }
+        
         //ユーザ情報の編集
         function edit_user(){
-            var param = "id="+project_id;
-            location.href ="http://10.20.170.52/web/p_edit_user.php?"+param;
+            //var param = "id="+project_id;
+            location.href ="http://10.20.170.52/web/p_edit_user.php";
         }
         //変更処理
         function edit(){

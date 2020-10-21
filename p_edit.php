@@ -6,6 +6,7 @@ if(isset($_POST['search_pro'])){
     $address = $_POST["address"];
     $overview = $_POST["overview"];
     //結果格納用の配列
+    $row_array_project_id = "";
     $row_array_project = array();
     $row_array_address = array();
     $row_array_overview = array();
@@ -17,6 +18,7 @@ if(isset($_POST['search_pro'])){
         if(mysqli_num_rows($result) > 0){
             $i = 0;
             while($row = mysqli_fetch_assoc($result)){
+                $row_array_project_id[$i] = $row['projects_id'];
                 $row_array_project[$i] = $row['projects_name'];
                 $row_array_address[$i] = $row['projects_street_address'];
                 $row_array_overview[$i] = $row['overview'];
@@ -30,6 +32,7 @@ if(isset($_POST['search_pro'])){
         if(mysqli_num_rows($result) > 0){
             $i = 0;
             while($row = mysqli_fetch_assoc($result)){
+                $row_array_project_id[$i] = $row['projects_id'];
                 $row_array_project[$i] = $row['projects_name'];
                 $row_array_address[$i] = $row['projects_street_address'];
                 $row_array_overview[$i] = $row['overview'];
@@ -43,6 +46,7 @@ if(isset($_POST['search_pro'])){
         if(mysqli_num_rows($result) > 0){
             $i = 0;
             while($row = mysqli_fetch_assoc($result)){
+                $row_array_project_id[$i] = $row['projects_id'];
                 $row_array_project[$i] = $row['projects_name'];
                 $row_array_address[$i] = $row['projects_street_address'];
                 $row_array_overview[$i] = $row['overview'];
@@ -56,6 +60,7 @@ if(isset($_POST['search_pro'])){
         if(mysqli_num_rows($result) > 0){
             $i = 0;
             while($row = mysqli_fetch_assoc($result)){
+                $row_array_project_id[$i] = $row['projects_id'];
                 $row_array_project[$i] = $row['projects_name'];
                 $row_array_address[$i] = $row['projects_street_address'];
                 $row_array_overview[$i] = $row['overview'];
@@ -69,6 +74,7 @@ if(isset($_POST['search_pro'])){
         if(mysqli_num_rows($result) > 0){
             $i = 0;
             while($row = mysqli_fetch_assoc($result)){
+                $row_array_project_id[$i] = $row['projects_id'];
                 $row_array_project[$i] = $row['projects_name'];
                 $row_array_address[$i] = $row['projects_street_address'];
                 $row_array_overview[$i] = $row['overview'];
@@ -82,6 +88,7 @@ if(isset($_POST['search_pro'])){
         if(mysqli_num_rows($result) > 0){
             $i = 0;
             while($row = mysqli_fetch_assoc($result)){
+                $row_array_project_id[$i] = $row['projects_id'];
                 $row_array_project[$i] = $row['projects_name'];
                 $row_array_address[$i] = $row['projects_street_address'];
                 $row_array_overview[$i] = $row['overview'];
@@ -95,6 +102,7 @@ if(isset($_POST['search_pro'])){
         if(mysqli_num_rows($result) > 0){
             $i = 0;
             while($row = mysqli_fetch_assoc($result)){
+                $row_array_project_id[$i] = $row['projects_id'];
                 $row_array_project[$i] = $row['projects_name'];
                 $row_array_address[$i] = $row['projects_street_address'];
                 $row_array_overview[$i] = $row['overview'];
@@ -108,6 +116,7 @@ if(isset($_POST['search_pro'])){
         if(mysqli_num_rows($result) > 0){
             $i = 0;
             while($row = mysqli_fetch_assoc($result)){
+                $row_array_project_id[$i] = $row['projects_id'];
                 $row_array_project[$i] = $row['projects_name'];
                 $row_array_address[$i] = $row['projects_street_address'];
                 $row_array_overview[$i] = $row['overview'];
@@ -117,9 +126,13 @@ if(isset($_POST['search_pro'])){
         
     }
 //json形式に変更
+$json_array_project_id = json_encode($row_array_project_id);
 $json_array_project = json_encode($row_array_project);
 $json_array_address = json_encode($row_array_address);
 $json_array_overview = json_encode($row_array_overview);
+//セッションスタート
+//session_start();
+//$_SESSION['count'] = $row_array_project_id[0];
 
     
 }
@@ -179,6 +192,7 @@ $json_array_overview = json_encode($row_array_overview);
         </div>
 </main>
 <script type="text/javascript">
+
 if(<?php echo $json_array_project; ?> != ""){
         //テーブル表示
         //phpから配列の取得

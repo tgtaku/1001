@@ -1,13 +1,21 @@
 <?php
-if(isset($_GET['id'])){
+//画面遷移時の処理→既に登録されているユーザーの検索
+//プロジェクトIDの取得
+$project_id = "";
+session_start();
+$project_id = $_SESSION['count'];
+$project_id_now = json_encode($project_id);
+
+/*if(isset($_GET['id'])){
     $p_id = $_GET['id'];
-    $json_id = json_encode($p_id);
+    $json_id = json_encode($p_id);*/
     //print_r($p_id);
     //既存ユーザーの取得
+
 //参加者情報の取得
 $row_array_user = array();
 require "conn.php";
-$mysql_qry_user = "select * from assign_company_information_1 inner join users_information_1 on assign_company_information_1.companies_id = users_information_1.companies_id inner join projects_information_1 on assign_company_information_1.projects_id = projects_information_1.projects_id inner join companies_information_1 on assign_company_information_1.companies_id = companies_information_1.companies_id where assign_company_information_1.projects_id = '$p_id';";
+$mysql_qry_user = "select * from assign_company_information_1 inner join users_information_1 on assign_company_information_1.companies_id = users_information_1.companies_id inner join projects_information_1 on assign_company_information_1.projects_id = projects_information_1.projects_id inner join companies_information_1 on assign_company_information_1.companies_id = companies_information_1.companies_id where assign_company_information_1.projects_id = '$project_id';";
 $result_user = mysqli_query($conn, $mysql_qry_user);
 if(mysqli_num_rows($result_user) > 0){
     //print_r($result_user);
@@ -29,8 +37,8 @@ $json_array_user = json_encode($row_array_user);
 $json_array_company = json_encode($row_array_company);
 
 
-}
 
+//検索ボタン押下時の処理
 if(isset($_POST['search_user'])){
     //print_r($_POST);
     require "conn.php";

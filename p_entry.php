@@ -96,7 +96,7 @@ session_start();
         </div>
 </main>
         <script>
-
+            console.log("ID : " + <?php echo $_SESSION['count']; ?>);
 /*functon ent(){
     setPDF().then(()=>{
         page();
