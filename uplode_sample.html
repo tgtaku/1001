@@ -13,6 +13,7 @@
     <span style="color: #ff0000;" data-mce-style="color: #ff0000;"><div><img id="thumbnail" src=""></div></span>
   </p>
   <p><input type="submit" name="save" value="保存" /></p>
+  <p><input type="button" name="edit" value="登録" onclick = "file_up()"/></p>
 </form>
 
 <script>
@@ -34,6 +35,22 @@ $('#upfile').change(function(){
     }
   }
 });
+
+function file_up(){
+  fd = new FormData();
+  fd.append('encode',files);
+  xhttpreq = new XMLHttpRequest();
+  xhttpreq.onreadystatechange = function() {
+      if (xhttpreq.readyState == 4 && xhttpreq.status == 200) {
+          alert(xhttpreq.responseText);
+      }
+  };
+  xhttpreq.open("POST", "decode.php", true);
+  /*xhttpreq.addEventListener('load', (event) => {
+      window.location.href = "http://10.20.170.52/web/mypage.php";
+  });*/
+  xhttpreq.send(fd);
+}
 </script>
 </body>
 </html>
