@@ -23,7 +23,7 @@
                     <li><a href="c_entry.php">-施工会社登録</a></li>
                     <li><a href="c_edit.php">-施工会社/ユーザ編集</a></li>
                     <li>施工状況確認</li>
-                    <li><a href="report.php">-報告書確認</a></li>
+                    <li><a href="select_report.php">-報告書確認</a></li>
                 </ul>
             </div>
             <div class="maincol">
@@ -62,45 +62,59 @@
     var cell3 = [];
     var cell4 = [];
 
+    //登録用配列
+    var post_company_name = [];
+    var post_company_address = [];
+    var post_company_TEL = [];
+
 function add_com(){
 //テーブル取得
 var table = document.getElementById("c_info");
+var table_length = table.rows.length;
 var num = 1;
-while(table.rows[num].cells[1].getElementsByTagName("input")[0].value != ""){
-num++
+for(var i = 1; i < table_length; i++){
+    if(table.rows[i].cells[1].getElementsByTagName("input")[0].value != "" && table.rows[i].cells[2].getElementsByTagName("input")[0].value != "" && table.rows[i].cells[3].getElementsByTagName("input")[0].value != ""){
+        post_company_name.push(table.rows[i].cells[1].getElementsByTagName("input")[0].value);
+        post_company_address.push(table.rows[i].cells[2].getElementsByTagName("input")[0].value);
+        post_company_TEL.push(table.rows[i].cells[3].getElementsByTagName("input")[0].value);
+        //console.log(table.rows[i].cells[1].getElementsByTagName("input")[0].value);
+        
+    }else{
+
+    }
+    
 }
-console.log(num);
-            /*var s_name;
-            var s_page;
-            var s_x;
-            var s_y;
-            for(var i = 1; i<table.rows.length; i++){
-            s_name = table.rows[i].cells[1].innerHTML;
-            s_page = table.rows[i].cells[2].innerHTML;
-            s_x = table.rows[i].cells[3].innerHTML;
-            s_y = table.rows[i].cells[4].innerHTML;
+    console.log(post_company_name);
+    console.log(post_company_address);
+    console.log(post_company_TEL);
+
+    //フォームに情報があるか確認
+    if(post_company_name.length == 0){
+        //console.log("何もしない");
+    }else{
+        console.log("up");
             // フォームデータを取得
             //pdfIDの取得
             fd = new FormData();
-            var file = document.getElementById('selectedPDF').innerHTML;
-            fd.append('id', p_id);
-            fd.append('file',file);
-            fd.append('s_name', s_name);
-            fd.append('s_page', s_page);
-            fd.append('s_x',s_x);
-            fd.append('s_y', s_y);
-            fd.append('to_user', "to_user")
+            fd.append('company_name', post_company_name);
+            fd.append('address',post_company_address);
+            fd.append('TEL', post_company_TEL);
             xhttpreq = new XMLHttpRequest();
             xhttpreq.onreadystatechange = function() {
                 if (xhttpreq.readyState == 4 && xhttpreq.status == 200) {
                     alert(xhttpreq.responseText);
                 }
             };
-            xhttpreq.open("POST", "insert_report_place.php", true);
+            xhttpreq.open("POST", "insert_company_info.php", true);
+            xhttpreq.addEventListener('load', (event) => {
+                window.location.href = 'mypage.php';
+            });
             xhttpreq.send(fd);
-            }*/
+            }
+    }
+            
 
-}
+
 
 var n = 0;
 function add_table(){
